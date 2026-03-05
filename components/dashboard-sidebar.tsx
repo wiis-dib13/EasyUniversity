@@ -42,19 +42,21 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
   }
 
   const navContent = (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2.5 border-b border-sidebar-border px-5 py-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary">
-          <GraduationCap className="h-5 w-5 text-sidebar-primary-foreground" />
+    <div className="flex h-full flex-col bg-[#FDF1E1] border-r border-[#F3B664]/20 font-sans shadow-2xl">
+      {/* LOGO SECTION - Plus grande */}
+      <div className="flex items-center gap-4 px-8 py-10">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1E5D88] shadow-lg shadow-[#1E5D88]/30 text-white shrink-0">
+          <GraduationCap className="h-7 w-7" />
         </div>
-        <div className="flex flex-col">
-          <span className="text-sm font-bold text-sidebar-foreground">EasyEducation</span>
-          <span className="text-xs text-muted-foreground capitalize">{role} Portal</span>
+        <div className="flex flex-col leading-none">
+          <span className="text-lg font-black uppercase tracking-tighter text-[#1E5D88]">Easy</span>
+          <span className="text-lg font-black uppercase tracking-tighter text-[#1E5D88]">University</span>
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4">
-        <div className="flex flex-col gap-1">
+      {/* NAVIGATION - Boutons plus larges et hauts */}
+      <nav className="flex-1 px-5 py-4 overflow-y-auto">
+        <div className="flex flex-col gap-3">
           {links.map((link) => {
             const isActive = pathname === link.href
             return (
@@ -62,13 +64,13 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                className={`flex items-center gap-4 rounded-[1.25rem] px-5 py-4 text-[13px] font-black uppercase tracking-[0.1em] transition-all duration-200 ${
                   isActive
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent'
+                    ? 'bg-[#4E9F86] text-white shadow-lg shadow-[#4E9F86]/20 scale-[1.02]'
+                    : 'text-[#2D5A4C]/70 hover:bg-white hover:text-[#4E9F86] hover:translate-x-1 shadow-none'
                 }`}
               >
-                <link.icon className="h-4 w-4" />
+                <link.icon className={`h-5 w-5 shrink-0 ${isActive ? 'text-white' : 'text-[#4E9F86]'}`} />
                 {link.label}
               </Link>
             )
@@ -76,39 +78,52 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
         </div>
       </nav>
 
-      <div className="border-t border-sidebar-border px-3 py-4">
-        <div className="mb-3 flex items-center gap-3 px-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-primary/10 text-sm font-semibold text-sidebar-primary">
-            {userName.charAt(0).toUpperCase()}
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-sidebar-foreground">{userName || 'User'}</span>
-            <span className="text-xs text-muted-foreground capitalize">{role}</span>
-          </div>
+      {/* FOOTER SECTION - Profil plus large */}
+      <div className="p-6 mt-auto bg-gradient-to-t from-[#F3B664]/10 to-transparent">
+        <div className="rounded-[2.5rem] bg-white p-5 border border-[#F3B664]/30 shadow-xl shadow-[#4E9F86]/5">
+            <div className="mb-5 flex items-center gap-4 px-1">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F3B664] text-white font-black text-xl shadow-md">
+                    {userName.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col overflow-hidden">
+                    <span className="truncate text-[15px] font-black text-[#1E5D88] uppercase tracking-tight leading-tight">{userName || 'User'}</span>
+                    <span className="text-[10px] font-bold text-[#4E9F86] uppercase tracking-widest">{role} Portal</span>
+                </div>
+            </div>
+            <Button 
+                variant="ghost" 
+                className="w-full h-12 justify-start gap-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all active:scale-95" 
+                onClick={handleLogout}
+            >
+                <LogOut className="h-5 w-5" />
+                Sign Out
+            </Button>
         </div>
-        <Button variant="ghost" size="sm" className="w-full justify-start gap-3 text-muted-foreground" onClick={handleLogout}>
-          <LogOut className="h-4 w-4" />
-          Sign Out
-        </Button>
       </div>
     </div>
   )
 
   return (
     <>
+      {/* MOBILE TRIGGER - Plus gros pour les pouces */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed left-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card shadow-sm lg:hidden"
+        className="fixed left-6 top-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-[#F3B664]/30 bg-white text-[#1E5D88] shadow-2xl lg:hidden transition-transform active:scale-90"
         aria-label="Toggle menu"
       >
-        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {mobileOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
       </button>
 
+      {/* MOBILE OVERLAY */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 bg-foreground/20 backdrop-blur-sm lg:hidden" onClick={() => setMobileOpen(false)} />
+        <div 
+            className="fixed inset-0 z-40 bg-[#1E5D88]/40 backdrop-blur-md lg:hidden transition-opacity" 
+            onClick={() => setMobileOpen(false)} 
+        />
       )}
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 border-r border-sidebar-border bg-sidebar transition-transform lg:translate-x-0 ${
+      {/* SIDEBAR - Un peu plus large pour accommoder les gros boutons */}
+      <aside className={`fixed inset-y-0 left-0 z-40 w-80 transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) lg:translate-x-0 ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {navContent}
