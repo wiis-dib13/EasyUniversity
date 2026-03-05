@@ -14,9 +14,10 @@ export default async function StudentDashboard() {
     .single()
 
   const { data: questionnaire } = await supabase
-    .from('study_questionnaires')
+    .from('study_plans')
     .select('*')
-    .eq('student_id', user.id)
+    .eq('user_id', user.id)
+    .limit(1)
     .single()
 
   const { data: enrollments } = await supabase
@@ -39,7 +40,7 @@ export default async function StudentDashboard() {
     .order('assigned_at', { ascending: false })
     .limit(5)
 
-  const needsQuestionnaire = !questionnaire?.completed
+  const needsQuestionnaire = !questionnaire || !questionnaire.id
 
   return (
     <StudentDashboardContent

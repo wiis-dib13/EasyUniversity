@@ -42,7 +42,7 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
   }
 
   const navContent = (
-    <div className="flex h-full flex-col bg-[#FDF1E1] border-r border-[#F3B664]/20 font-sans shadow-2xl">
+    <div className="flex h-full flex-col bg-[#FDF1E1] border-r border-[#F3B664]/20 font-sans shadow-2xl w-56 fixed left-0 top-0">
       {/* LOGO SECTION - Plus grande */}
       <div className="flex items-center gap-4 px-8 py-10">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1E5D88] shadow-lg shadow-[#1E5D88]/30 text-white shrink-0">

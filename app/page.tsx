@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { GraduationCap, BookOpen, Brain, Users, Zap } from "lucide-react"
+import { GraduationCap, BookOpen, Brain, Users, Zap, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function LandingPage() {
@@ -121,6 +121,75 @@ export default function LandingPage() {
                     </div>
                 </div>
             ))}
+        </section>
+        {/* NEW SECTION: ENGLISH HUB / COURSES / LIBRARY */}
+        <section className="mt-20 mb-28">
+          <div className="flex flex-col lg:flex-row gap-8 items-stretch">
+            
+            {/* English Dept - Large Card */}
+            <div className="flex-[2] bg-[#1E5D88] rounded-[3rem] p-8 md:p-12 relative overflow-hidden group shadow-2xl shadow-[#1E5D88]/20">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700" />
+              
+              <div className="relative z-10 flex flex-col h-full justify-between">
+                <div>
+                  <div className="inline-flex items-center gap-2 bg-[#F3B664] px-4 py-2 rounded-full mb-6">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white">English Dept Hub</span>
+                  </div>
+                  <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-none tracking-tighter mb-6">
+                    Everything you need <br /> <span className="text-[#F3B664]">in one place</span>
+                  </h2>
+                  <p className="text-[#FDF1E1]/70 max-w-md font-medium text-lg leading-relaxed mb-8">
+                    Access official course materials, literature summaries, and phonetics guides specifically curated for our University.
+                  </p>
+                </div>
+                
+                <div className="flex flex-wrap gap-4">
+                  <Button className="h-14 px-8 rounded-2xl bg-[#4E9F86] hover:bg-[#3d806b] text-white font-black uppercase tracking-widest shadow-lg transition-all hover:scale-105">
+                    Explore Dept
+                  </Button>
+                  <Button variant="outline" className="h-14 px-8 rounded-2xl border-white/20 white  font-black uppercase tracking-widest transition-all">
+                    Course Guide
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Courses Library - Smaller Sidebar Card */}
+            <div className="flex-1 flex flex-col gap-6">
+              
+              <div className="flex-1 bg-white border-2 border-[#F3B664]/20 rounded-[2.5rem] p-8 hover:border-[#4E9F86]/50 transition-colors shadow-xl shadow-[#4E9F86]/5 group">
+                <div className="h-14 w-14 bg-[#4E9F86]/10 rounded-2xl flex items-center justify-center text-[#4E9F86] mb-6 group-hover:scale-110 transition-transform">
+                  <BookOpen className="h-8 w-8" />
+                </div>
+                <h4 className="text-xl font-black uppercase tracking-tighter text-[#1E5D88] mb-2">Digital Library</h4>
+                <p className="text-sm font-medium text-slate-500 mb-6">Instant access to 200+ PDFs, past exam papers, and audio recordings.</p>
+                <Link href="#" className="inline-flex items-center gap-2 text-[#4E9F86] font-black uppercase text-xs tracking-widest group-hover:gap-4 transition-all">
+                  Open Library <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <div className="flex-1 bg-[#F3B664] rounded-[2.5rem] p-8 shadow-xl shadow-[#F3B664]/20 group relative overflow-hidden">
+                <div className="relative z-10">
+                  <h4 className="text-xl font-black uppercase tracking-tighter text-white mb-2">Join the Community</h4>
+                  <p className="text-white/80 text-sm font-medium mb-6 leading-snug">Connect with other students in the English department.</p>
+                  <div className="flex -space-x-3 mb-2">
+                    {[1,2,3,4].map(i => (
+                      <div key={i} className="h-10 w-10 rounded-full border-2 border-[#F3B664] bg-white/20 flex items-center justify-center text-[10px] font-black text-white">
+                        U{i}
+                      </div>
+                    ))}
+                    <div className="h-10 w-10 rounded-full border-2 border-[#F3B664] bg-[#1E5D88] flex items-center justify-center text-[10px] font-black text-white">
+                      +1k
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute -bottom-4 -right-4 text-white opacity-10 rotate-12">
+                   <Users className="h-24 w-24" />
+                </div>
+              </div>
+
+            </div>
+          </div>
         </section>
       </main>
 
