@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { GraduationCap, Mail, Lock, Loader2 } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { toast } = useToast()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,8 +39,16 @@ export default function LoginPage() {
         .single()
 
       if (profile?.role === 'professor') {
+        toast({
+          title: 'Welcome back, Professor!',
+          description: 'Redirecting to your dashboard...',
+        })
         router.push('/dashboard/professor')
       } else {
+        toast({
+          title: 'Welcome back!',
+          description: 'Redirecting to your dashboard...',
+        })
         router.push('/dashboard/student')
       }
     } catch (error: unknown) {
