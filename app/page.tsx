@@ -1,581 +1,413 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { useScroll, useTransform, motion } from "framer-motion"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { 
-  GraduationCap, BookOpen, Brain, Users, Zap, ArrowRight, 
-  Star, CheckCircle, TrendingUp, Globe, Award, MessageSquare, 
-  ChevronRight, Play 
+  BookOpen, Brain, Calendar, Star, Users, Menu, X, Zap, 
+  GraduationCap, CheckCircle2, ArrowRight, MousePointer2 
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-/* ─── Scroll Animation Component ─── */
-const ContainerScroll = ({ titleComponent, children }) => {
-  const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({ target: containerRef })
-  const [isMobile, setIsMobile] = useState(false)
+export default function NextEduLanding() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 768)
-    check()
-    window.addEventListener("resize", check)
-    return () => window.removeEventListener("resize", check)
-  }, [])
+  const colors = {
+    bg: "#F2F7F9",
+    teal: "#107B75",
+    orange: "#FB6F4A",
+    textDark: "#1E293B",
+  }
 
-  const rotate = useTransform(scrollYProgress, [0, 1], [18, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], isMobile ? [0.7, 0.95] : [1.05, 1])
-  const translateY = useTransform(scrollYProgress, [0, 1], [0, -80])
+  const navLinks = [
+    { name: "AI Coach", href: "#" },
+    { name: "English Dept", href: "#" },
+    { name: "Courses", href: "#" },
+    { name: "Library", href: "#" }
+  ]
 
   return (
-    <div className="h-[70rem] md:h-[90rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
-      <div className="py-10 md:py-40 w-full relative" style={{ perspective: "1200px" }}>
-        <motion.div style={{ translateY }} className="max-w-4xl mx-auto text-center mb-12">
-          {titleComponent}
-        </motion.div>
-        <motion.div
-          style={{
-            rotateX: rotate,
-            scale,
-            boxShadow: "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026",
-          }}
-          className="max-w-5xl -mt-12 mx-auto h-[28rem] md:h-[38rem] w-full border-4 border-[#1E5D88]/20 p-2 md:p-4 bg-[#1E5D88] rounded-[30px] shadow-2xl"
-        >
-          <div className="h-full w-full overflow-hidden rounded-2xl bg-[#FDF1E1]">
-            {children}
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  )
-}
+    <div className="min-h-screen font-sans overflow-x-hidden selection:bg-[#107B75]/20" style={{ backgroundColor: colors.bg }}>
+      
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            className="fixed inset-0 z-[100] bg-white p-8 flex flex-col md:hidden"
+          >
+            <div className="flex justify-between items-center mb-12">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/1.png"
+                  alt="Easy University Logo"
+                  className="h-8 w-8 object-contain"
+                />
+                <span className="text-xl font-black tracking-tighter text-[#1E293B]">next-edu</span>
+              </div>
+              <button onClick={() => setIsMenuOpen(false)}><X size={32} /></button>
+            </div>
+            <nav className="flex flex-col gap-8 text-2xl font-bold">
+              {navLinks.map((link) => (
+                <Link key={link.name} href={link.href} onClick={() => setIsMenuOpen(false)}>{link.name}</Link>
+              ))}
+              <Button asChild className="mt-4 h-16 rounded-2xl bg-[#FB6F4A] text-xl font-bold text-white shadow-xl">
+                <Link href="/auth/login" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
+              </Button>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-/* ─── Stat Counter Card ─── */
-const StatCard = ({ number, label, icon: Icon, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className="flex flex-col items-center p-8 bg-white rounded-[2.5rem] border border-[#F3B664]/20 shadow-lg shadow-[#4E9F86]/5 hover:shadow-xl hover:shadow-[#4E9F86]/10 transition-all group hover:-translate-y-1"
-  >
-    <div className="h-14 w-14 bg-[#4E9F86]/10 rounded-2xl flex items-center justify-center text-[#4E9F86] mb-4 group-hover:bg-[#4E9F86] group-hover:text-white transition-all">
-      <Icon className="h-7 w-7" />
-    </div>
-    <span className="text-4xl font-black text-[#1E5D88] tracking-tighter">{number}</span>
-    <span className="text-xs font-bold uppercase tracking-widest text-slate-400 mt-1">{label}</span>
-  </motion.div>
-)
-
-/* ─── Testimonial Card ─── */
-const TestimonialCard = ({ name, year, text, rating, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className="bg-white rounded-[2.5rem] p-8 border border-[#F3B664]/20 shadow-lg flex flex-col gap-4 hover:border-[#4E9F86]/30 transition-all"
-  >
-    <div className="flex gap-1">
-      {Array.from({ length: rating }).map((_, i) => (
-        <Star key={i} className="h-4 w-4 fill-[#F3B664] text-[#F3B664]" />
-      ))}
-    </div>
-    <p className="text-[#2D5A4C]/80 font-medium leading-relaxed text-sm">"{text}"</p>
-    <div className="flex items-center gap-3 mt-auto pt-4 border-t border-slate-100">
-      <div className="h-10 w-10 rounded-full bg-[#4E9F86]/10 flex items-center justify-center text-[#4E9F86] font-black text-sm">
-        {name[0]}
-      </div>
-      <div>
-        <p className="font-black text-[#1E5D88] text-sm tracking-tight">{name}</p>
-        <p className="text-xs text-slate-400 font-medium">{year}</p>
-      </div>
-    </div>
-  </motion.div>
-)
-
-/* ─── Plan Card ─── */
-const PlanCard = ({ title, price, features, accent, delay, popular }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className={`rounded-[2.5rem] p-8 relative overflow-hidden flex flex-col gap-6 ${
-      accent
-        ? "bg-[#1E5D88] text-white shadow-2xl shadow-[#1E5D88]/30"
-        : "bg-white border-2 border-[#F3B664]/20 shadow-lg"
-    }`}
-  >
-    {popular && (
-      <div className="absolute top-6 right-6 bg-[#F3B664] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white">
-        Most Popular
-      </div>
-    )}
-    <div>
-      <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${accent ? "text-[#F3B664]" : "text-[#4E9F86]"}`}>{title}</p>
-      <div className="flex items-end gap-1">
-        <span className={`text-5xl font-black tracking-tighter ${accent ? "text-white" : "text-[#1E5D88]"}`}>{price}</span>
-        {price !== "Free" && <span className={`text-sm font-bold pb-2 ${accent ? "text-white/60" : "text-slate-400"}`}>/month</span>}
-      </div>
-    </div>
-    <ul className="flex flex-col gap-3 flex-1">
-      {features.map((f, i) => (
-        <li key={i} className="flex items-center gap-3 text-sm font-medium">
-          <CheckCircle className={`h-4 w-4 flex-shrink-0 ${accent ? "text-[#F3B664]" : "text-[#4E9F86]"}`} />
-          <span className={accent ? "text-white/80" : "text-slate-500"}>{f}</span>
-        </li>
-      ))}
-    </ul>
-    <Button className={`h-12 rounded-xl font-black uppercase tracking-widest text-xs transition-all hover:scale-105 active:scale-95 ${
-      accent
-        ? "bg-[#F3B664] hover:bg-[#e5a450] text-white shadow-lg"
-        : "bg-[#4E9F86] hover:bg-[#3d806b] text-white"
-    }`}>
-      Get Started <ChevronRight className="h-4 w-4 ml-1" />
-    </Button>
-  </motion.div>
-)
-
-/* ─── MAIN PAGE ─── */
-export default function LandingPage() {
-  return (
-    <div className="min-h-screen bg-[#FDF1E1] text-[#2D5A4C] font-sans selection:bg-[#F3B664]/30 overflow-x-hidden">
-
-      {/* ── ORIGINAL HEADER (unchanged) ── */}
-      <header className="flex items-center justify-between px-6 md:px-12 py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#1E5D88] shadow-md flex-shrink-0">
-            <GraduationCap className="h-6 w-6 text-white" />
-          </div>
-          <div className="leading-none">
-            <span className="block text-xl font-black uppercase tracking-tighter text-[#1E5D88]">Easy</span>
-            <span className="block text-xl font-black uppercase tracking-tighter text-[#1E5D88]">University</span>
-          </div>
+      <header className="relative z-50 flex items-center justify-between px-6 py-6 max-w-[1200px] mx-auto">
+        <div className="flex items-center gap-2">
+          <motion.div 
+            whileHover={{ rotate: -10 }}
+            className="h-10 w-10 flex items-center justify-center"
+          >
+            <img
+              src="/1.png"
+              alt="Easy University Logo"
+              className="h-10 w-10 object-contain"
+            />
+          </motion.div>
+          <span style={{ color: colors.textDark }} className="text-2xl font-black tracking-tighter">
+            next<span style={{ color: colors.teal }}>-edu</span>
+          </span>
         </div>
-        <nav className="hidden lg:flex items-center gap-8">
-          {["AI Coach", "English Dept", "Courses", "Library"].map((item) => (
-            <Link key={item} href="#" className="text-[11px] font-black uppercase tracking-widest text-[#4E9F86] hover:opacity-70 transition-opacity">
-              {item}
-            </Link>
+
+        <nav className="hidden md:flex items-center gap-8 font-bold text-[14px] uppercase tracking-wider text-[#1E293B]">
+          {navLinks.map((link) => (
+            <Link key={link.name} href={link.href} className="hover:text-[#107B75] transition-colors">{link.name}</Link>
           ))}
-          <Link href="/auth/login">
-            <Button className="rounded-full bg-[#4E9F86] hover:bg-[#3d806b] text-white px-8 py-2 font-bold uppercase text-xs tracking-widest shadow-lg shadow-[#4E9F86]/20 transition-all active:scale-95">
-              Sign In
-            </Button>
-          </Link>
+          <Button asChild className="rounded-xl px-8 py-6 font-bold text-white shadow-xl hover:scale-105 transition-all bg-[#FB6F4A] hover:bg-[#e05b38]">
+            <Link href="/auth/login">Sign In</Link>
+          </Button>
         </nav>
-        <Link href="/auth/login" className="lg:hidden">
-          <Button size="sm" className="rounded-full bg-[#4E9F86] text-white font-bold uppercase text-[10px]">Sign In</Button>
-        </Link>
+
+        <button className="md:hidden text-[#1E293B]" onClick={() => setIsMenuOpen(true)}>
+          <Menu size={32} />
+        </button>
       </header>
 
-      <main className="relative mx-auto max-w-[1400px] px-6 md:px-12 pt-8 md:pt-12">
-
-        {/* ── ORIGINAL DECORATIONS (unchanged) ── */}
-        <div className="absolute top-[-50px] left-[-50px] w-[300px] md:w-[500px] h-[300px] md:h-[400px] bg-[#F3B664] rounded-full blur-[80px] opacity-20 -z-10" />
-        <div className="absolute top-0 left-0 hidden md:block">
-          <svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-90">
-            <path d="M0 0H400C300 150 150 250 0 300V0Z" fill="#F3B664" />
-          </svg>
-        </div>
-
-        {/* ── ORIGINAL HERO (unchanged) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-5 pt-10 md:pt-20 text-center lg:text-left">
-            <h1 className="text-5xl md:text-7xl lg:text-[80px] font-black leading-[0.9] tracking-tighter text-[#4E9F86] mb-8">
-              ONLINE <br /> EDUCATION
+      <main className="max-w-[1200px] mx-auto px-6">
+        
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-12 mb-24">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 style={{ color: colors.teal }} className="text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-6">
+              ONLINE<br />EDUCATION
             </h1>
-            <h3 className="text-lg md:text-xl font-black uppercase tracking-[0.2em] text-[#4E9F86] mb-6">
-              Fast • Simple • Adapted
-            </h3>
-            <p className="max-w-md mx-auto lg:mx-0 text-base md:text-lg text-[#2D5A4C]/80 leading-relaxed font-medium mb-12">
-              Master the English Department curriculum with Algeria's first AI-powered platform.
-              Get instant summaries, official resources, and 24/7 coaching tailored to your success.
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-slate-100 mb-8">
+              <span className="h-2 w-2 rounded-full bg-[#FB6F4A] animate-pulse" />
+              <span className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest">Fast • Simple • Adapted</span>
+            </div>
+            <p className="text-lg text-slate-500 font-medium leading-relaxed max-w-md mb-10">
+              La plateforme n°1 pour les étudiants du département d'Anglais. Réussissez vos modules avec nos résumés IA et ressources exclusives.
             </p>
-            <div className="flex justify-center lg:justify-start gap-2 mb-12">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className={`h-2.5 w-2.5 rounded-full ${i === 1 ? 'bg-[#4E9F86]' : 'bg-[#4E9F86]/30'}`} />
-              ))}
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <Button className="w-full sm:w-auto h-16 rounded-full bg-[#4E9F86] hover:bg-[#3d806b] px-12 text-lg font-black uppercase tracking-widest text-white shadow-xl shadow-[#4E9F86]/20 transition-transform hover:scale-105 active:scale-95">
-                Get Started
+            
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <Button className="w-full sm:w-auto h-16 px-10 rounded-2xl text-lg font-bold text-white shadow-2xl hover:-translate-y-1 transition-all bg-[#FB6F4A]">
+                Commencer Gratuitement
               </Button>
-              <div className="flex items-center gap-2 text-[#4E9F86] font-bold text-sm">
-                <Zap className="h-4 w-4 fill-[#4E9F86]" /> 500+ Students Joined
-              </div>
-            </div>
-          </div>
-          <div className="lg:col-span-7 relative mt-12 lg:mt-0">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[90%] bg-[#F3B664] rounded-[50px] md:rounded-[100px] -z-10" />
-            <div className="relative p-4 flex justify-center">
-              <img src="/1.svg" alt="EasyUniversity Online Study" className="w-full max-w-[600px] h-auto drop-shadow-2xl" />
-              <div className="absolute bottom-10 left-0 md:left-10 bg-[#1E5D88] px-4 py-3 rounded-full shadow-lg text-white flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span className="text-xs font-bold tracking-tight">English Dept. Approved</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── ORIGINAL FEATURES (unchanged) ── */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24 mb-20">
-          {[
-            { icon: Brain, title: "AI Summaries", desc: "Complex modules explained simply." },
-            { icon: BookOpen, title: "Full Library", desc: "All PDFs and TDs in one place." },
-            { icon: Zap, title: "Smart Planning", desc: "Optimized study schedules." }
-          ].map((f, i) => {
-            const Icon = f.icon
-            return (
-              <div key={i} className="bg-white/50 border border-[#F3B664]/20 p-6 rounded-[2rem] flex items-start gap-4">
-                <div className="text-[#4E9F86] p-3 bg-white rounded-xl shadow-sm">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <div>
-                  <h4 className="font-black uppercase text-sm tracking-tighter text-[#1E5D88]">{f.title}</h4>
-                  <p className="text-xs font-medium text-slate-500">{f.desc}</p>
-                </div>
-              </div>
-            )
-          })}
-        </section>
-
-        {/* ── ORIGINAL ENGLISH HUB SECTION (unchanged) ── */}
-        <section className="mt-20 mb-28">
-          <div className="flex flex-col lg:flex-row gap-8 items-stretch">
-            <div className="flex-[2] bg-[#1E5D88] rounded-[3rem] p-8 md:p-12 relative overflow-hidden group shadow-2xl shadow-[#1E5D88]/20">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700" />
-              <div className="relative z-10 flex flex-col h-full justify-between">
-                <div>
-                  <div className="inline-flex items-center gap-2 bg-[#F3B664] px-4 py-2 rounded-full mb-6">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white">English Dept Hub</span>
-                  </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-white uppercase leading-none tracking-tighter mb-6">
-                    Everything you need <br /> <span className="text-[#F3B664]">in one place</span>
-                  </h2>
-                  <p className="text-[#FDF1E1]/70 max-w-md font-medium text-lg leading-relaxed mb-8">
-                    Access official course materials, literature summaries, and phonetics guides specifically curated for our University.
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-4">
-                  <Button className="h-14 px-8 rounded-2xl bg-[#4E9F86] hover:bg-[#3d806b] text-white font-black uppercase tracking-widest shadow-lg transition-all hover:scale-105">
-                    Explore Dept
-                  </Button>
-                  <Button className="h-14 px-8 rounded-2xl bg-[#4E9F86] hover:bg-[#3d806b] text-white font-black uppercase tracking-widest transition-all hover:scale-105">
-                    Course Guide
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1 flex flex-col gap-6">
-              <div className="flex-1 bg-white border-2 border-[#F3B664]/20 rounded-[2.5rem] p-8 hover:border-[#4E9F86]/50 transition-colors shadow-xl shadow-[#4E9F86]/5 group">
-                <div className="h-14 w-14 bg-[#4E9F86]/10 rounded-2xl flex items-center justify-center text-[#4E9F86] mb-6 group-hover:scale-110 transition-transform">
-                  <BookOpen className="h-8 w-8" />
-                </div>
-                <h4 className="text-xl font-black uppercase tracking-tighter text-[#1E5D88] mb-2">Digital Library</h4>
-                <p className="text-sm font-medium text-slate-500 mb-6">Instant access to 200+ PDFs, past exam papers, and audio recordings.</p>
-                <Link href="#" className="inline-flex items-center gap-2 text-[#4E9F86] font-black uppercase text-xs tracking-widest group-hover:gap-4 transition-all">
-                  Open Library <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-              <div className="flex-1 bg-[#F3B664] rounded-[2.5rem] p-8 shadow-xl shadow-[#F3B664]/20 group relative overflow-hidden">
-                <div className="relative z-10">
-                  <h4 className="text-xl font-black uppercase tracking-tighter text-white mb-2">Join the Community</h4>
-                  <p className="text-white/80 text-sm font-medium mb-6 leading-snug">Connect with other students in the English department.</p>
-                  <div className="flex -space-x-3 mb-2">
-                    {[1, 2, 3, 4].map(i => (
-                      <div key={i} className="h-10 w-10 rounded-full border-2 border-[#F3B664] bg-white/20 flex items-center justify-center text-[10px] font-black text-white">
-                        U{i}
-                      </div>
+              <div className="flex items-center gap-3">
+                 <div className="flex -space-x-3">
+                    {[1,2,3].map(i => (
+                      <img 
+                        key={i} 
+                        src={`https://i.pravatar.cc/100?img=${i+10}`} 
+                        alt="Student"
+                        className="h-10 w-10 rounded-full border-2 border-white object-cover"
+                      />
                     ))}
-                    <div className="h-10 w-10 rounded-full border-2 border-[#F3B664] bg-[#1E5D88] flex items-center justify-center text-[10px] font-black text-white">
-                      +1k
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -bottom-4 -right-4 text-white opacity-10 rotate-12">
-                  <Users className="h-24 w-24" />
-                </div>
+                 </div>
+                 <p className="text-xs font-bold text-slate-600">Rejoint par +500 étudiants</p>
               </div>
             </div>
-          </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative lg:block"
+          >
+            <div className="absolute -top-10 -right-10 w-64 h-64 bg-[#107B75]/10 rounded-full blur-3xl" />
+            
+            {/* Photo principale avec différentes options de forme ronde */}
+            <div className="relative z-10">
+              {/* Option 1: Cercle parfait */}
+              <img 
+                src="https://img.freepik.com/free-vector/learning-concept-illustration_114360-6186.jpg" 
+                alt="Education Illustration" 
+                className="w-full h-auto rounded-full border-8 border-white shadow-2xl"
+              />
+              
+              {/* Option 2: Forme ovale */}
+              {/* <img 
+                src="https://img.freepik.com/free-vector/learning-concept-illustration_114360-6186.jpg" 
+                alt="Education Illustration" 
+                className="w-full h-auto rounded-[50%] border-8 border-white shadow-2xl"
+              /> */}
+              
+              {/* Option 3: Coins très arrondis (presque cercle mais pas tout à fait) */}
+              {/* <img 
+                src="https://img.freepik.com/free-vector/learning-concept-illustration_114360-6186.jpg" 
+                alt="Education Illustration" 
+                className="w-full h-auto rounded-[100px] border-8 border-white shadow-2xl"
+              /> */}
+              
+            
+              
+          
+            </div>
+          </motion.div>
         </section>
 
         {/* ── STATS SECTION ── */}
-        <section className="mb-28">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-           
-          
-          </motion.div>
-      
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-24 bg-white p-8 rounded-[3rem] shadow-sm">
+           {[
+             { label: "Ressources", val: "200+" },
+             { label: "Résumés IA", val: "1.2k" },
+             { label: "Étudiants", val: "500+" },
+             { label: "Satisfaction", val: "99%" }
+           ].map((stat, i) => (
+             <div key={i} className="text-center">
+               <h3 className="text-3xl font-black text-[#107B75]">{stat.val}</h3>
+               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+             </div>
+           ))}
         </section>
 
-        {/* ── HOW IT WORKS ── */}
-        <section className="mb-0">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <div className="inline-flex items-center gap-2 bg-[#F3B664]/20 px-5 py-2 rounded-full mb-4">
-              <Play className="h-4 w-4 text-[#F3B664]" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#F3B664]">How it works</span>
+        {/* ── FEATURES & DASHBOARD ── */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24">
+          <div className="lg:col-span-7 bg-white rounded-[3rem] p-6 shadow-2xl border border-slate-100">
+            <div className="flex items-center justify-between mb-8 border-b pb-4">
+              <div className="flex items-center gap-3 text-[#107B75]">
+                <GraduationCap size={24} />
+                <span className="font-bold text-slate-800 uppercase text-xs tracking-widest">Dashboard de l'étudiant</span>
+              </div>
+              <div className="flex gap-2">
+                <div className="h-2 w-2 rounded-full bg-slate-200" />
+                <div className="h-2 w-2 rounded-full bg-slate-200" />
+              </div>
             </div>
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-[#1E5D88]">
-              3 steps to <span className="text-[#4E9F86]">success</span>
-            </h2>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-            {/* Connector line */}
-            <div className="hidden md:block absolute top-1/3 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-[#4E9F86]/20 via-[#F3B664]/50 to-[#4E9F86]/20" />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="bg-slate-50 p-6 rounded-3xl">
+                   <p className="text-[10px] font-black text-slate-400 uppercase mb-4">Progression Semestre</p>
+                   <div className="h-32 w-32 rounded-full border-[12px] border-[#107B75] border-t-slate-200 flex items-center justify-center mx-auto">
+                      <span className="text-2xl font-black text-[#107B75]">70%</span>
+                   </div>
+                </div>
+                
+                {/* Nouvelle image ronde ajoutée */}
+                <div className="bg-slate-50 p-4 rounded-3xl flex items-center gap-4">
+                  <img 
+                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=100&h=100&fit=crop" 
+                    alt="Student"
+                    className="h-16 w-16 rounded-full object-cover border-3 border-[#107B75]"
+                  />
+                  <div>
+                    <p className="font-bold text-sm">Marie L.</p>
+                    <p className="text-xs text-slate-500">Top étudiante du mois</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="bg-[#107B75] text-white p-6 rounded-3xl h-full flex flex-col justify-between">
+                   <Brain size={32} className="opacity-50" />
+                   <div>
+                     <p className="font-bold text-xl mb-2 italic">"Ready for Phonetics?"</p>
+                     <Button className="w-full bg-white/20 hover:bg-white/30 border-none text-white font-bold rounded-xl">
+                       Lancer le Quiz IA
+                     </Button>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 flex flex-col gap-4">
+             {[
+               { icon: Brain, title: "Résumés IA", desc: "Tes cours synthétisés en 1 minute." },
+               { icon: BookOpen, title: "Bibliothèque", desc: "Examens, PDFs et supports audio." },
+               { icon: Calendar, title: "Planning IA", desc: "Un calendrier d'étude qui s'adapte à toi." }
+             ].map((item, i) => (
+               <motion.div 
+                 key={i} 
+                 whileHover={{ x: 10 }}
+                 className="bg-white p-6 rounded-[2rem] flex items-center gap-6 cursor-pointer border-2 border-transparent hover:border-[#107B75]/10 shadow-sm"
+               >
+                  <div className="h-14 w-14 rounded-2xl bg-[#E8F2F1] text-[#107B75] flex items-center justify-center">
+                    <item.icon size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-800 leading-tight">{item.title}</h4>
+                    <p className="text-slate-500 text-sm">{item.desc}</p>
+                  </div>
+                  <ArrowRight size={18} className="ml-auto text-slate-300" />
+               </motion.div>
+             ))}
+          </div>
+        </section>
+
+        {/* ── TESTIMONIALS WITH ROUNDED IMAGES ── */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-32">
+           <div className="bg-white p-10 rounded-[3rem] shadow-sm relative overflow-hidden group">
+              <Star className="absolute -top-4 -right-4 text-[#FB6F4A]/10 w-24 h-24" />
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1494790108777-466fd6c79e9b?w=150&h=150&fit=crop" 
+                  alt="Sarah M."
+                  className="h-14 w-14 rounded-full object-cover border-2 border-[#107B75]"
+                />
+                <div>
+                  <h5 className="font-black text-slate-800">Sarah M.</h5>
+                  <p className="text-xs font-bold text-[#107B75] uppercase">Master 1 Civilisation</p>
+                </div>
+              </div>
+              <p className="text-slate-600 font-medium italic leading-relaxed">
+                "Grâce à next-edu, j'ai pu rattraper tout mon retard en Phonétique. Les résumés IA sont d'une précision incroyable."
+              </p>
+           </div>
+           
+           <div className="bg-white p-10 rounded-[3rem] shadow-sm relative overflow-hidden group">
+              <Star className="absolute -top-4 -right-4 text-[#FB6F4A]/10 w-24 h-24" />
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop" 
+                  alt="Rayane K."
+                  className="h-14 w-14 rounded-full object-cover border-2 border-[#FB6F4A]"
+                />
+                <div>
+                  <h5 className="font-black text-slate-800">Rayane K.</h5>
+                  <p className="text-xs font-bold text-[#FB6F4A] uppercase">Licence 2 Linguistique</p>
+                </div>
+              </div>
+              <p className="text-slate-600 font-medium italic leading-relaxed">
+                "Enfin une plateforme moderne pour nous ! La bibliothèque de ressources est super riche et bien organisée."
+              </p>
+           </div>
+        </section>
+
+        {/* ── NEW SECTION WITH ROUNDED IMAGES ── */}
+        <section className="mb-32">
+          <h2 className="text-3xl font-black text-[#1E293B] mb-8 text-center">Nos étudiants en action</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { step: "01", title: "Create Your Account", desc: "Sign up for free in under 60 seconds. No credit card required.", color: "bg-[#4E9F86]" },
-              { step: "02", title: "Choose Your Module", desc: "Browse curated content for every course in the English Department.", color: "bg-[#F3B664]" },
-              { step: "03", title: "Learn With AI", desc: "Get instant explanations, summaries and personalized coaching.", color: "bg-[#1E5D88]" },
-            ].map((s, i) => (
-              <motion.div
+              "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&h=300&fit=crop",
+              "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=300&h=300&fit=crop",
+              "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=300&h=300&fit=crop",
+              "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=300&h=300&fit=crop"
+            ].map((src, i) => (
+              <img 
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-[2.5rem] p-8 border border-[#F3B664]/20 shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-all"
-              >
-                <span className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl text-white font-black text-sm mb-6 ${s.color}`}>
-                  {s.step}
-                </span>
-                <h4 className="text-lg font-black tracking-tight text-[#1E5D88] mb-3">{s.title}</h4>
-                <p className="text-sm font-medium text-slate-500 leading-relaxed">{s.desc}</p>
-                <div className={`absolute -bottom-6 -right-6 h-20 w-20 rounded-full opacity-5 ${s.color}`} />
-              </motion.div>
+                src={src}
+                alt={`Student ${i+1}`}
+                className="w-full h-48 object-cover rounded-[2rem] shadow-lg hover:scale-105 transition-transform duration-300"
+              />
             ))}
           </div>
         </section>
 
-        {/* ── SCROLL ANIMATION — PLATFORM PREVIEW ── */}
-        <section className="mb-10 -mt-16">
-          <ContainerScroll
-            titleComponent={
-              <div>
-                <div className="inline-flex items-center gap-2 bg-[#4E9F86]/10 px-5 py-2 rounded-full mb-6">
-                  <Globe className="h-4 w-4 text-[#4E9F86]" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#4E9F86]">Platform Preview</span>
-                </div>
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-[#1E5D88] leading-none mb-4">
-                  A platform built for <br />
-                  <span className="text-[#4E9F86]">Algerian students</span>
-                </h2>
-                <p className="text-[#2D5A4C]/60 font-medium text-lg max-w-xl mx-auto">
-                  Every feature designed around the way you study at the English Department.
-                </p>
-              </div>
-            }
-          >
-            {/* Dashboard Mock UI */}
-            <div className="h-full w-full p-4 md:p-8 flex flex-col gap-4 bg-[#FDF1E1]">
-              {/* Mock nav */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-[#1E5D88] flex items-center justify-center">
-                    <GraduationCap className="h-4 w-4 text-white" />
-                  </div>
-                  <span className="font-black text-[#1E5D88] text-sm uppercase tracking-tighter">EasyUniversity</span>
-                </div>
-                <div className="flex gap-2">
-                  {["Dashboard", "Library", "AI Coach"].map(t => (
-                    <span key={t} className="hidden md:block text-[9px] font-black uppercase tracking-widest text-[#4E9F86] bg-[#4E9F86]/10 px-3 py-1 rounded-full">{t}</span>
-                  ))}
-                </div>
-              </div>
-              {/* Mock content */}
-              <div className="grid grid-cols-3 gap-3 flex-1">
-                <div className="col-span-2 bg-white rounded-2xl p-5 border border-[#F3B664]/20 shadow-sm">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-[#4E9F86] mb-3">Today's Progress</p>
-                  <div className="flex flex-col gap-2">
-                    {["British Literature — Chapter 4", "Phonetics — Vowels", "Translation Module 3"].map((m, i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className="h-2 rounded-full flex-1 bg-slate-100">
-                          <div className="h-2 rounded-full bg-[#4E9F86]" style={{ width: `${[75, 45, 90][i]}%` }} />
-                        </div>
-                        <span className="text-[8px] font-bold text-slate-400 w-20 truncate">{m}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="bg-[#1E5D88] rounded-2xl p-4 flex flex-col justify-between">
-                  <Brain className="h-6 w-6 text-[#F3B664]" />
-                  <div>
-                    <p className="text-[8px] font-black uppercase tracking-widest text-white/60 mb-1">AI Coach</p>
-                    <p className="text-white font-black text-xs leading-tight">Ask me anything about your modules</p>
-                  </div>
-                </div>
-                <div className="bg-[#F3B664] rounded-2xl p-4 flex flex-col justify-between">
-                  <Award className="h-6 w-6 text-white" />
-                  <div>
-                    <p className="text-[8px] font-black uppercase tracking-widest text-white/80 mb-1">Streak</p>
-                    <p className="text-white font-black text-2xl">7✧</p>
-                  </div>
-                </div>
-                <div className="col-span-2 bg-white rounded-2xl p-4 border border-[#F3B664]/20 shadow-sm">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-[#4E9F86] mb-3">Upcoming Exams</p>
-                  <div className="flex gap-2">
-                    {["Linguistics", "Translation", "Literature"].map((e, i) => (
-                      <div key={i} className="flex-1 bg-[#FDF1E1] rounded-xl p-2 text-center">
-                        <p className="text-[8px] font-black text-[#1E5D88]">{e}</p>
-                        <p className="text-[7px] text-slate-400 font-medium">In {[3, 7, 14][i]}d</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ContainerScroll>
-        </section>
-
-        {/* ── TESTIMONIALS ── */}
-        <section className="mb-28 -mt-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <div className="inline-flex items-center gap-2 bg-[#F3B664]/20 px-5 py-2 rounded-full mb-4">
-              <MessageSquare className="h-4 w-4 text-[#F3B664]" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#F3B664]">Testimonials</span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-[#1E5D88]">
-              What students <span className="text-[#4E9F86]">say</span>
-            </h2>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <TestimonialCard name="Amina B." year="L2 English Dept." rating={5} text="EasyUniversity changed how I study. The AI summaries save me hours every week — I finally understand phonetics!" delay={0} />
-            <TestimonialCard name="Yacine K." year="L3 English Dept." rating={5} text="The digital library is incredible. Everything is organized, from TDs to past exams. I wish I had this in first year." delay={0.1} />
-            <TestimonialCard name="Sara M." year="Master 1 English" rating={5} text="The AI Coach answered all my questions about British Literature at 2am before my exam. Absolute lifesaver." delay={0.2} />
+        {/* ── AVATARS CIRCLE SECTION ── */}
+        <section className="mb-32 text-center">
+          <h2 className="text-3xl font-black text-[#1E293B] mb-8">Notre communauté</h2>
+          <div className="flex justify-center -space-x-4">
+            {[1,2,3,4,5].map(i => (
+              <img 
+                key={i}
+                src={`https://i.pravatar.cc/150?img=${i+20}`}
+                alt={`User ${i}`}
+                className="h-16 w-16 rounded-full border-4 border-white shadow-xl hover:scale-110 transition-transform duration-300"
+              />
+            ))}
           </div>
+          <p className="mt-6 text-slate-600 font-medium">+500 étudiants nous font confiance</p>
         </section>
-
-        {/* ── PRICING SECTION ── */}
-        <section className="mb-28">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-14"
-          >
-            <div className="inline-flex items-center gap-2 bg-[#4E9F86]/10 px-5 py-2 rounded-full mb-4">
-              <Award className="h-4 w-4 text-[#4E9F86]" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#4E9F86]">Simple pricing</span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-[#1E5D88]">
-              Start free, <span className="text-[#4E9F86]">grow fast</span>
-            </h2>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <PlanCard
-              title="Student"
-              price="Free"
-              features={["5 AI summaries/month", "Basic library access", "Community forum", "Module overviews"]}
-              accent={false}
-              delay={0}
-            />
-            <PlanCard
-              title="Pro"
-              price="400 DA"
-              features={["Unlimited AI summaries", "Full library access", "Priority AI Coach", "Exam planning tools", "Audio recordings"]}
-              accent={true}
-              popular={true}
-              delay={0.1}
-            />
-            <PlanCard
-              title="Premium"
-              price="700 DA"
-              features={["Everything in Pro", "1-on-1 AI sessions", "Offline downloads", "Early access features", "Study group tools"]}
-              accent={false}
-              delay={0.2}
-            />
-          </div>
-        </section>
-
-        {/* ── CTA BANNER ── */}
-        <section className="mb-28">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="bg-[#1E5D88] rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden"
-          >
-            <div className="absolute top-0 left-0 w-72 h-72 bg-[#F3B664]/10 rounded-full -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#4E9F86]/10 rounded-full translate-x-1/3 translate-y-1/3" />
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 bg-[#F3B664] px-5 py-2 rounded-full mb-8">
-                <Zap className="h-4 w-4 text-white fill-white" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-white">Join Today — It's Free</span>
-              </div>
-              <h2 className="text-4xl md:text-7xl font-black tracking-tighter text-white leading-none mb-6">
-                Ready to ace <br /> <span className="text-[#F3B664]">your exams?</span>
-              </h2>
-              <p className="text-white/60 font-medium text-lg max-w-lg mx-auto mb-10">
-                Join 500+ students already studying smarter with Algeria's first AI-powered English Department platform.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button className="h-16 rounded-full bg-[#F3B664] hover:bg-[#e5a450] px-12 text-lg font-black uppercase tracking-widest text-white shadow-xl shadow-[#F3B664]/20 transition-transform hover:scale-105">
-                  Start for Free
-                </Button>
-                <Button className="h-16 rounded-full bg-[#4E9F86] hover:bg-[#3d806b] text-white px-12 font-black uppercase tracking-widest transition-all hover:scale-105">
-                  See the Platform
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </section>
-
       </main>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-[#F3B664]/20 py-16 px-6 md:px-12">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#1E5D88] shadow-md">
-                <GraduationCap className="h-6 w-6 text-white" />
-              </div>
-              <div className="leading-none">
-                <span className="block text-xl font-black uppercase tracking-tighter text-[#1E5D88]">Easy</span>
-                <span className="block text-xl font-black uppercase tracking-tighter text-[#1E5D88]">University</span>
-              </div>
-            </div>
-            <div className="flex gap-8">
-              {["AI Coach", "Library", "Courses", "Community", "Pricing"].map(link => (
-                <Link key={link} href="#" className="text-[10px] font-black uppercase tracking-widest text-[#4E9F86]/60 hover:text-[#4E9F86] transition-colors">
-                  {link}
-                </Link>
-              ))}
-            </div>
+      <footer style={{ backgroundColor: colors.teal }} className="rounded-t-[4rem] pt-24 pb-12 px-6">
+        <div className="max-w-[1200px] mx-auto text-center">
+          <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter mb-8 leading-none">
+            PRÊT À RÉUSSIR<br /><span className="text-[#FB6F4A]">TON SEMESTRE ?</span>
+          </h2>
+          
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-24">
+            <Button className="h-16 px-12 rounded-2xl bg-[#FB6F4A] hover:bg-white hover:text-[#FB6F4A] text-white font-black text-lg shadow-2xl transition-all">
+              S'inscrire Maintenant
+            </Button>
+            <Button className="h-16 px-12 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-black text-lg backdrop-blur-md transition-all">
+              Voir le Guide
+            </Button>
           </div>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-[#F3B664]/20">
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#4E9F86]/40">
-              © 2026 EasyUniversity • Dib Wissem — All rights reserved
-            </p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-[#4E9F86]/40">
-              Made with ♡ for Algerian Students
-            </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-left border-t border-white/10 pt-12">
+            <div className="space-y-4">
+               <div className="flex items-center gap-2 text-white">
+                 <img
+                   src="/1.png"
+                   alt="Easy University Logo"
+                   className="h-8 w-8 object-contain"
+                 />
+                 <span className="text-2xl font-black tracking-tighter uppercase">next-edu</span>
+               </div>
+               <p className="text-white/60 text-sm font-medium">
+                 Le futur de l'éducation pour le département d'anglais en Algérie.
+               </p>
+               <div className="flex items-center gap-2 mt-4">
+                 <img 
+                   src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=50&h=50&fit=crop" 
+                   alt="Team"
+                   className="h-10 w-10 rounded-full object-cover border-2 border-white"
+                 />
+                 <img 
+                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=50&h=50&fit=crop" 
+                   alt="Team"
+                   className="h-10 w-10 rounded-full object-cover border-2 border-white"
+                 />
+               </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-8">
+               <div className="space-y-3">
+                 <h4 className="text-white font-black uppercase text-xs tracking-widest">Plateforme</h4>
+                 <ul className="text-white/60 text-sm space-y-2 font-bold">
+                   <li className="hover:text-white cursor-pointer transition-colors">Cours</li>
+                   <li className="hover:text-white cursor-pointer transition-colors">Examens</li>
+                   <li className="hover:text-white cursor-pointer transition-colors">Quiz IA</li>
+                 </ul>
+               </div>
+               <div className="space-y-3">
+                 <h4 className="text-white font-black uppercase text-xs tracking-widest">Support</h4>
+                 <ul className="text-white/60 text-sm space-y-2 font-bold">
+                   <li className="hover:text-white cursor-pointer transition-colors">Contact</li>
+                   <li className="hover:text-white cursor-pointer transition-colors">FAQ</li>
+                 </ul>
+               </div>
+            </div>
+
+            <div className="flex flex-col md:items-end justify-center">
+               <div className="bg-white/5 p-4 rounded-2xl border border-white/10 inline-block">
+                 <p className="text-white font-black text-xs uppercase tracking-widest mb-1">Status</p>
+                 <div className="flex items-center gap-2">
+                   <div className="h-2 w-2 rounded-full bg-green-400" />
+                   <span className="text-white/80 text-sm font-bold uppercase tracking-widest">Servers Online</span>
+                 </div>
+               </div>
+               <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.3em] mt-8 italic">
+                 © 2026 Designed for English Dept
+               </p>
+            </div>
           </div>
         </div>
       </footer>
-
     </div>
   )
 }
