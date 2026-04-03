@@ -42,7 +42,7 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
   }
 
   const navContent = (
-    <div className="flex h-full flex-col bg-[#FDF1E1] border-r border-[#F3B664]/20 font-sans shadow-2xl w-56 fixed left-0 top-0">
+    <div className="flex h-full flex-col bg-[#F8F8F8] border-r border-slate-200/80 font-sans shadow-xl w-56 fixed left-0 top-0">
       {/* LOGO SECTION - Plus grande */}
       <div className="flex items-center gap-4 px-8 py-10">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1E5D88] shadow-lg shadow-[#1E5D88]/30 text-white shrink-0">
@@ -79,10 +79,10 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
       </nav>
 
       {/* FOOTER SECTION - Profil plus large */}
-      <div className="p-6 mt-auto bg-gradient-to-t from-[#F3B664]/10 to-transparent">
-        <div className="rounded-[2.5rem] bg-white p-5 border border-[#F3B664]/30 shadow-xl shadow-[#4E9F86]/5">
+      <div className="p-6 mt-auto bg-gradient-to-t from-slate-100/70 to-transparent">
+        <div className="rounded-[2.5rem] bg-white p-5 border border-slate-200 shadow-lg shadow-slate-900/5">
             <div className="mb-5 flex items-center gap-4 px-1">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#F3B664] text-white font-black text-xl shadow-md">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-teal-600 text-white font-black text-xl shadow-md">
                     {userName.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col overflow-hidden">
@@ -108,7 +108,7 @@ export function DashboardSidebar({ role, userName }: { role: 'student' | 'profes
       {/* MOBILE TRIGGER - Plus gros pour les pouces */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed left-6 top-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-[#F3B664]/30 bg-white text-[#1E5D88] shadow-2xl lg:hidden transition-transform active:scale-90"
+        className="fixed left-6 top-6 z-50 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-slate-200 bg-white text-[#1E5D88] shadow-2xl lg:hidden transition-transform active:scale-90"
         aria-label="Toggle menu"
       >
         {mobileOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}

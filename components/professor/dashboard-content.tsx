@@ -17,7 +17,7 @@ export function ProfessorDashboardContent({ profile, courses, totalStudents, tot
   const firstName = ((profile?.full_name as string) || 'Professor').split(' ')[0]
 
   return (
-    <div className="flex flex-col gap-8 pb-12 font-sans selection:bg-[#F3B664]/30">
+    <div className="flex flex-col gap-8 pb-12 font-sans selection:bg-teal-500/30">
       
       {/* GREETING SECTION */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -44,7 +44,7 @@ export function ProfessorDashboardContent({ profile, courses, totalStudents, tot
       </div>
 
       {/* COURSES SECTION */}
-      <Card className="rounded-[2.5rem] border-[#F3B664]/20 bg-white/50 shadow-xl shadow-[#4E9F86]/5 overflow-hidden">
+      <Card className="rounded-[2.5rem] border-slate-200 bg-white/70 shadow-xl shadow-slate-900/5 overflow-hidden">
         <CardHeader className="flex flex-row items-center justify-between px-8 pt-8 pb-4">
           <CardTitle className="text-xl font-black uppercase tracking-tighter text-[#1E5D88]">Your Active Courses</CardTitle>
           <Link href="/dashboard/professor/courses" className="text-xs font-black uppercase tracking-widest text-[#4E9F86] hover:underline">Manage All</Link>
@@ -52,7 +52,7 @@ export function ProfessorDashboardContent({ profile, courses, totalStudents, tot
         <CardContent className="px-6 pb-8">
           {courses.length === 0 ? (
             <div className="py-16 text-center flex flex-col items-center">
-              <div className="h-20 w-20 bg-[#FDF1E1] rounded-full flex items-center justify-center text-[#4E9F86] mb-4">
+              <div className="h-20 w-20 bg-teal-500/10 rounded-full flex items-center justify-center text-[#4E9F86] mb-4">
                 <BookOpen className="h-10 w-10 opacity-40" />
               </div>
               <h3 className="font-black text-[#1E5D88] uppercase tracking-tight text-xl mb-2">No Courses Yet</h3>
@@ -79,7 +79,7 @@ export function ProfessorDashboardContent({ profile, courses, totalStudents, tot
                   
                   <div className="flex gap-3 mt-auto">
                     <Link href={`/dashboard/professor/upload?course=${course.id}`} className="flex-1">
-                      <Button variant="outline" className="w-full h-11 rounded-xl border-[#F3B664]/30 text-[#1E5D88] font-black uppercase text-[10px] tracking-widest hover:bg-[#FDF1E1] gap-2">
+                      <Button variant="outline" className="w-full h-11 rounded-xl border-slate-200 text-[#1E5D88] font-black uppercase text-[10px] tracking-widest hover:bg-slate-50 gap-2">
                         <Upload className="h-3.5 w-3.5" /> Upload
                       </Button>
                     </Link>
@@ -102,7 +102,7 @@ export function ProfessorDashboardContent({ profile, courses, totalStudents, tot
 // STYLED STAT CARD
 function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: number; color: string }) {
   return (
-    <Card className="rounded-[2rem] border-none bg-white shadow-xl shadow-[#4E9F86]/5 overflow-hidden transition-transform hover:scale-105">
+    <Card className="rounded-[2rem] border-none bg-white shadow-xl shadow-slate-900/5 overflow-hidden transition-transform hover:scale-105">
       <CardContent className="flex items-center gap-5 p-6">
         <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-md ${color} text-white`}>
           {isValidElement(icon) ? cloneElement(icon as React.ReactElement<any>, { className: "h-7 w-7" }) : icon}

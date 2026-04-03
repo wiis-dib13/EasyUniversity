@@ -13,6 +13,10 @@ export default async function StudentDashboard() {
     .eq('id', user.id)
     .single()
 
+  if (profile?.role === 'professor') {
+    redirect('/dashboard/professor')
+  }
+
   const { data: questionnaire } = await supabase
     .from('study_plans')
     .select('*')

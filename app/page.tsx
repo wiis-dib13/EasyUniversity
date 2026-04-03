@@ -41,7 +41,7 @@ export default function NextEduLanding() {
       <nav className="fixed top-0 w-full z-[100] bg-[#F8F8F8]/90 backdrop-blur-md border-b border-slate-200/50 flex justify-between items-center px-6 md:px-12 py-4">
         <Link href="/" className="flex items-center gap-2 group cursor-pointer">
           <div className="h-8 w-8 bg-slate-900 rounded-full flex items-center justify-center">
-            <span className="text-white font-black text-xl leading-none">Q</span>
+            <span className="text-white font-black text-xl leading-none">N</span>
           </div>
           <span className="text-xl font-bold tracking-tighter">next-edu</span>
         </Link>

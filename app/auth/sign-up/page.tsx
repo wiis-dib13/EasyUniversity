@@ -39,7 +39,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data: signUpData, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -48,11 +48,24 @@ export default function SignUpPage() {
             `${window.location.origin}/dashboard/${role}`,
           data: {
             full_name: fullName,
-            role: role,
+            role,
           },
         },
       })
       if (error) throw error
+
+      if (signUpData.user?.id) {
+        await supabase.from('profiles').upsert(
+          {
+            id: signUpData.user.id,
+            email,
+            full_name: fullName,
+            role,
+          },
+          { onConflict: 'id' },
+        )
+      }
+
       router.push('/auth/sign-up-success')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')

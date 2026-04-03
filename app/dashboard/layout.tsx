@@ -24,7 +24,7 @@ export default async function DashboardLayout({
   const userName = profile?.full_name || user.email || 'User'
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#F8F8F8] selection:bg-teal-500/30">
       <DashboardSidebar role={role} userName={userName} />
       <main className="lg:pl-56">
         <div className="px-4 py-6 md:px-8 md:py-8">

@@ -21,11 +21,11 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
     try {
+      const supabase = createClient()
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -39,7 +39,21 @@ export default function LoginPage() {
         .eq('id', user!.id)
         .single()
 
-      if (profile?.role === 'professor') {
+      const metadataRole = user?.user_metadata?.role
+      const normalizedMetadataRole =
+        metadataRole === 'professor' || metadataRole === 'student'
+          ? metadataRole
+          : null
+      const effectiveRole = profile?.role || normalizedMetadataRole || 'student'
+
+      if (normalizedMetadataRole && profile?.role !== normalizedMetadataRole) {
+        await supabase
+          .from('profiles')
+          .update({ role: normalizedMetadataRole })
+          .eq('id', user!.id)
+      }
+
+      if (effectiveRole === 'professor') {
         toast({
           title: 'Welcome back, Professor!',
           description: 'Redirecting to your dashboard...',
@@ -53,7 +67,13 @@ export default function LoginPage() {
         router.push('/dashboard/student')
       }
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        setError(
+          'Unable to reach Supabase. Check your internet connection and verify NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.',
+        )
+      } else {
+        setError(error instanceof Error ? error.message : 'An error occurred')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -89,7 +109,7 @@ export default function LoginPage() {
             className="mb-6 flex h-16 w-16 items-center justify-center bg-slate-900 border-2 border-slate-900 shadow-[8px_8px_0px_0px_#14b8a6]"
           >
             {/* Si tu as un vrai logo 1.png, tu peux le remettre ici, sinon la lettrine colle bien au style */}
-            <span className="text-white font-black text-3xl leading-none">Q</span>
+            <span className="text-white font-black text-3xl leading-none">N</span>
           </motion.div>
           <div className="text-center">
             <h1 className="text-4xl font-black tracking-tighter text-slate-900 mb-2">

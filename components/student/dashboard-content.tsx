@@ -19,7 +19,7 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
   const firstName = ((profile?.full_name as string) || 'Student').split(' ')[0]
 
   return (
-    <div className="flex flex-col gap-8 pb-12 font-sans selection:bg-[#F3B664]/30">
+    <div className="flex flex-col gap-8 pb-12 font-sans selection:bg-teal-500/30">
       
       {/* GREETING SECTION */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -70,7 +70,7 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
 
       <div className="grid gap-8 lg:grid-cols-2">
         {/* MY COURSES */}
-        <Card className="rounded-[2.5rem] border-[#F3B664]/20 bg-white/50 shadow-xl shadow-[#4E9F86]/5 overflow-hidden">
+        <Card className="rounded-[2.5rem] border-slate-200 bg-white/70 shadow-xl shadow-slate-900/5 overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between px-8 pt-8 pb-4">
             <CardTitle className="text-xl font-black uppercase tracking-tighter text-[#1E5D88]">My Courses</CardTitle>
             <Link href="/dashboard/student/courses" className="text-xs font-black uppercase tracking-widest text-[#4E9F86] hover:underline">View all</Link>
@@ -85,11 +85,11 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
                     {((enrollment.courses as any)?.title as string || 'C').charAt(0)}
                   </div>
                   <div className="flex-1 overflow-hidden">
-                    <p className="font-black text-[#2D5A4C] truncate uppercase text-sm tracking-tight">{(enrollment.courses as any)?.title as string}</p>
+                    <p className="font-black text-[#1E5D88] truncate uppercase text-sm tracking-tight">{(enrollment.courses as any)?.title as string}</p>
                     <p className="text-[10px] font-bold text-[#4E9F86] uppercase tracking-widest opacity-70">{(enrollment.courses as any)?.code as string}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                      <Progress value={(enrollment.progress as number) || 0} className="w-16 md:w-24 h-2 bg-[#FDF1E1]" />
+                      <Progress value={(enrollment.progress as number) || 0} className="w-16 md:w-24 h-2 bg-slate-200" />
                       <span className="text-[10px] font-black text-[#1E5D88]">{(enrollment.progress as number) || 0}%</span>
                   </div>
                 </div>
@@ -99,7 +99,7 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
         </Card>
 
         {/* STUDY SESSIONS */}
-        <Card className="rounded-[2.5rem] border-[#F3B664]/20 bg-white/50 shadow-xl shadow-[#4E9F86]/5 overflow-hidden">
+        <Card className="rounded-[2.5rem] border-slate-200 bg-white/70 shadow-xl shadow-slate-900/5 overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between px-8 pt-8 pb-4">
             <CardTitle className="text-xl font-black uppercase tracking-tighter text-[#1E5D88]">Upcoming Sessions</CardTitle>
             <Link href="/dashboard/student/schedule" className="text-xs font-black uppercase tracking-widest text-[#4E9F86] hover:underline">Full Schedule</Link>
@@ -109,8 +109,8 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
               <EmptyState icon={<Clock />} text="No upcoming sessions" link="/dashboard/student/schedule" btnText="Set Up Plan" />
             ) : (
               reminders.map((reminder) => (
-                <div key={reminder.id as string} className="flex items-center gap-4 rounded-3xl bg-white p-4 shadow-sm border border-transparent hover:border-[#F3B664]/30 transition-all">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3B664]/10 text-[#F3B664]">
+                <div key={reminder.id as string} className="flex items-center gap-4 rounded-3xl bg-white p-4 shadow-sm border border-transparent hover:border-teal-500/30 transition-all">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-600">
                     <Calendar className="h-5 w-5" />
                   </div>
                   <div className="flex-1">
@@ -131,7 +131,7 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
 
       {/* GRADES */}
       {grades.length > 0 && (
-        <Card className="rounded-[2.5rem] border-[#F3B664]/20 bg-white/50 shadow-xl shadow-[#4E9F86]/5 overflow-hidden">
+        <Card className="rounded-[2.5rem] border-slate-200 bg-white/70 shadow-xl shadow-slate-900/5 overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between px-8 pt-8 pb-4">
             <CardTitle className="text-xl font-black uppercase tracking-tighter text-[#1E5D88]">Recent Grades</CardTitle>
             <Link href="/dashboard/student/grades" className="text-xs font-black uppercase tracking-widest text-[#4E9F86] hover:underline">View All Scores</Link>
@@ -139,12 +139,12 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
           <CardContent className="px-6 pb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {grades.map((grade) => (
-                <div key={grade.id as string} className="flex items-center justify-between rounded-3xl bg-white p-5 shadow-sm border border-[#FDF1E1]">
+                <div key={grade.id as string} className="flex items-center justify-between rounded-3xl bg-white p-5 shadow-sm border border-slate-100">
                   <div>
                     <p className="font-black text-[#1E5D88] uppercase text-xs">{(grade.courses as any)?.title as string}</p>
                     <p className="text-[10px] font-bold text-[#4E9F86] uppercase tracking-widest mt-1">{grade.assessment_type as string}</p>
                   </div>
-                  <p className="text-2xl font-black text-[#F3B664]">{grade.grade as number}<span className="text-xs text-[#2D5A4C]/30 ml-1">/{grade.max_grade as number}</span></p>
+                  <p className="text-2xl font-black text-teal-600">{grade.grade as number}<span className="text-xs text-[#2D5A4C]/30 ml-1">/{grade.max_grade as number}</span></p>
                 </div>
               ))}
             </div>
@@ -158,9 +158,9 @@ export function StudentDashboardContent({ profile, enrollments, reminders, grade
 // HELPERS COMPONENTS
 function StatCard({ icon, label, value, color, isDarkText = false }: { icon: React.ReactNode; label: string; value: number; color: string; isDarkText?: boolean }) {
   return (
-    <Card className="rounded-[2rem] border-none bg-white shadow-xl shadow-[#4E9F86]/5 overflow-hidden transition-transform hover:scale-105">
+    <Card className="rounded-[2rem] border-none bg-white shadow-xl shadow-slate-900/5 overflow-hidden transition-transform hover:scale-105">
       <CardContent className="flex items-center gap-5 p-6">
-        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-md ${color} ${!isDarkText ? 'text-white' : 'text-[#F3B664]'}`}>
+        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-md ${color} ${!isDarkText ? 'text-white' : 'text-teal-600'}`}>
           {isValidElement(icon) ? cloneElement(icon as React.ReactElement<any>, { className: "h-6 w-6" }) : icon}
         </div>
         <div>
@@ -175,7 +175,7 @@ function StatCard({ icon, label, value, color, isDarkText = false }: { icon: Rea
 function EmptyState({ icon, text, link, btnText }: { icon: React.ReactNode; text: string; link: string; btnText: string }) {
     return (
         <div className="py-10 text-center flex flex-col items-center">
-            <div className="h-16 w-16 bg-[#FDF1E1] rounded-full flex items-center justify-center text-[#4E9F86] mb-4">
+      <div className="h-16 w-16 bg-teal-500/10 rounded-full flex items-center justify-center text-[#4E9F86] mb-4">
                 {isValidElement(icon) ? cloneElement(icon as React.ReactElement<any>, { className: "h-8 w-8 opacity-40" }) : icon}
             </div>
             <p className="font-bold text-[#2D5A4C]/50 uppercase text-xs tracking-widest mb-4">{text}</p>
