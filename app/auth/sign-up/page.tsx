@@ -22,7 +22,6 @@ export default function SignUpPage() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
@@ -39,6 +38,7 @@ export default function SignUpPage() {
     }
 
     try {
+      const supabase = createClient()
       const { data: signUpData, error } = await supabase.auth.signUp({
         email,
         password,
@@ -68,7 +68,13 @@ export default function SignUpPage() {
 
       router.push('/auth/sign-up-success')
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        setError(
+          'Unable to reach Supabase. Verify NEXT_PUBLIC_SUPABASE_URL in .env.local (your current domain may be invalid) and check your network.',
+        )
+      } else {
+        setError(error instanceof Error ? error.message : 'An error occurred')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -153,7 +159,9 @@ export default function SignUpPage() {
                 <User className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <Input
                   id="fullName"
+                  name="fullName"
                   type="text"
+                  autoComplete="name"
                   placeholder="John Doe"
                   required
                   value={fullName}
@@ -172,7 +180,9 @@ export default function SignUpPage() {
                 <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <Input
                   id="email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="you@university.dz"
                   required
                   value={email}
@@ -191,7 +201,9 @@ export default function SignUpPage() {
                 <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <Input
                   id="password"
+                  name="password"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="Min. 6 characters"
                   required
                   value={password}
@@ -210,7 +222,9 @@ export default function SignUpPage() {
                 <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <Input
                   id="repeat-password"
+                  name="repeatPassword"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="Repeat your password"
                   required
                   value={repeatPassword}
